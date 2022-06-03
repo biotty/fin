@@ -36,9 +36,9 @@ namespace {
     }
 }
 
-long cents(double price) { return lrint(price * 100); }
+long round_cents(double price) { return lrint(price * 100); }
 
-price_delta Contract::at(MarketSpot m)
+price_delta Contract::at(MarketPoint m)
 {
     if (e > 0) {  // call
         if (m.s <= 0) return { 0, 0 };

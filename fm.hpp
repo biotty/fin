@@ -4,17 +4,20 @@
 #include <utility>
 
 constexpr double days_of_year = 365.2422;
-long cents(double price);
+long round_cents(double price);
+
 struct price_delta {
     double price;
     double delta;
 };
-struct MarketSpot
+
+struct MarketPoint
 {
     long d;
     double s;
     double iv;
 };
+
 class Contract
 {
     long q;  // quantity of contracted assets, or of owned assets
@@ -26,7 +29,7 @@ public:
     static Contract make_call(long q, double k, long e) { return { q, e, k }; }
     static Contract make_put(long q, double k, long e) { return { q, -e, k }; }
     static Contract make_own(long q, double k) { return { q, 0, k }; }
-    price_delta at(MarketSpot m);
+    price_delta at(MarketPoint m);
 };
 
 #endif
