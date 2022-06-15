@@ -2,19 +2,19 @@
 CFLAGS = -std=c++2a -I.
 
 .PHONY:
-verify: test/fm_test
-	test/fm_test
+verify: test/fom_test
+	test/fom_test
 
-test/fm_test: test/fm_test.cpp fm.o
-	$(CXX) $(CFLAGS) -o $@ test/fm_test.cpp fm.o
+test/fom_test: test/fom_test.cpp fom.o
+	$(CXX) $(CFLAGS) -o $@ test/fom_test.cpp fom.o
 
-fm.o: fm.cpp fm.hpp
-	$(CXX) $(CFLAGS) -c fm.cpp
+fom.o: fom.cpp fom.hpp
+	$(CXX) $(CFLAGS) -c fom.cpp
 
 .PHONY:
 clean:
-	rm -f fm.o
+	rm -f fom.o
 
 .PHONY:
 sweep: clean
-	rm -f test/fm_test
+	rm -f test/fom_test
