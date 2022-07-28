@@ -38,10 +38,10 @@ namespace {
 
 long round_cents(double price) { return lrint(price * 100); }
 
-price_delta Contract::at(MarketPoint m)
+PriceDelta Contract::at(MarketPoint m)
 {
-    switch (type) {
-    case Call:
+    switch (contract_type) {
+    case ContractType::CALL:
         if (m.price <= 0)
             return { 0, 0 };
 
@@ -56,7 +56,7 @@ price_delta Contract::at(MarketPoint m)
             double kd = abcdf(d2) * quantity;
             return { m.price * delta - strike * kd, delta };
         }
-    case Put:
+    case ContractType::PUT:
         break;
     }
 

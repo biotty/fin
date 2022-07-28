@@ -6,7 +6,7 @@
 constexpr double days_of_year = 365.2422;
 long round_cents(double price);
 
-struct price_delta {
+struct PriceDelta {
     double price;
     double delta;
 };
@@ -18,19 +18,19 @@ struct MarketPoint
     double iv;
 };
 
-enum ContractType {
-    Call,
-    Put,
+enum class ContractType {
+    CALL,
+    PUT,
 };
 
 struct Contract
 {
-    ContractType type;
+    ContractType contract_type;
     long quantity;
     long expiration;
     double strike;
 
-    price_delta at(MarketPoint m);
+    PriceDelta at(MarketPoint m);
 };
 
 #endif
