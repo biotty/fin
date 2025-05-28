@@ -17,11 +17,11 @@ namespace {
     double abcdf(double x)
     {
         const double y = .5 + .5 * sqrt(1 - exp(-x * x * a));
-        return x > 0 ? y : 1 - y;
+        return (x > 0) ? y : 1 - y;
     }
 
     double yt(long d, long e) {
-        return d >= e ? 0 : (e - d) / days_of_year;
+        return (d >= e) ? 0 : (e - d) / days_of_year;
     }
 
     bool xdom(double tt, double iv, double k)
@@ -40,36 +40,22 @@ long round_cents(double price) { return lrint(price * 100); }
 
 PriceDelta Contract::at(MarketPoint m)
 {
-    switch (contract_type) {
-    case ContractType::CALL:
-        if (m.price <= 0)
-            return { 0, 0 };
-
-        {
-            double tt = yt(m.day, expiration);
-            if (xdom(tt, m.iv, strike)) {
-                if (m.price <= strike) return { 0, 0 };
-                else return { m.price - strike, 1 };
-            }
-            auto [ d1, d2 ] = z(tt, m.iv, m.price, strike);
-            double delta = abcdf(d1) * quantity;
-            double kd = abcdf(d2) * quantity;
-            return { m.price * delta - strike * kd, delta };
-        }
-    case ContractType::PUT:
-        break;
+    const int u = (contract_type == ContractType::CALL) ? 1 : -1;
+    if (m.price <= 0) /*[[ unlikely ]]*/ {
+        return (u > 0)
+                ? PriceDelta{ 0, 0 }
+                : PriceDelta{ strike - m.price, 1 };
     }
-
-    if (m.price <= 0)
-        return { strike - m.price, 1 };
-
-    double tt = yt(m.day, expiration);
-    if (xdom(tt, m.iv, strike)) {
-        if (strike <= m.price) return { 0, 0 };
-        else return { strike - m.price, -1 };
+    const double tt = yt(m.day, expiration);
+    if (xdom(tt, m.iv, strike)) /*[[ unlikely ]]*/ {
+        const double p = (m.price - strike) * u;
+        return (p <= 0)
+                ? PriceDelta{ 0, 0 }
+                : PriceDelta{ p, static_cast<double>(u) };
     }
-    auto [ d1, d2 ] = z(tt, m.iv, m.price, strike);
-    double delta = abcdf(-d1) * quantity;
-    double kd = abcdf(-d2) * quantity;
-    return { strike * kd - m.price * delta, -delta };
+    auto w = z(tt, m.iv * u, m.price, strike);
+    auto q = quantity * u;
+    auto d = q * abcdf(w.first);
+    auto k = q * abcdf(w.second);
+    return { m.price * d - strike * k, d };
 }

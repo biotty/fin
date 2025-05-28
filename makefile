@@ -1,5 +1,5 @@
 
-CFLAGS = -std=c++2a -I.
+CFLAGS = -std=c++17 -I.
 
 .PHONY:
 verify: test/fom_test
