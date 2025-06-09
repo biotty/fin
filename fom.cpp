@@ -1,7 +1,5 @@
 #include "fom.hpp"
 
-#include <iostream>
-#include <iomanip>
 #include <utility>
 #include <cmath>
 
@@ -59,3 +57,4 @@ PriceDelta Contract::at(MarketPoint m)
     auto k = q * abcdf(w.second);
     return { m.price * d - strike * k, d };
 }
+
