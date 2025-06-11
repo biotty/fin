@@ -1,15 +1,14 @@
-
-CFLAGS = -std=c++17 -I.
+CXXFLAGS = -std=c++17 -I.
 
 .PHONY:
 verify: test/fom_test
 	test/fom_test
 
 test/fom_test: test/fom_test.cpp fom.o
-	$(CXX) $(CFLAGS) -o $@ test/fom_test.cpp fom.o
+	$(CXX) $(CXXFLAGS) -o $@ test/fom_test.cpp fom.o
 
 fom.o: fom.cpp fom.hpp
-	$(CXX) $(CFLAGS) -c fom.cpp
+	$(CXX) $(CXXFLAGS) -c fom.cpp
 
 .PHONY:
 clean:
