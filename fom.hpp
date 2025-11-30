@@ -1,8 +1,6 @@
 #ifndef FOM_HPP
 #define FOM_hpp
 
-#include <utility>
-
 constexpr double days_of_year = 365.2422;
 long round_cents(double price);
 

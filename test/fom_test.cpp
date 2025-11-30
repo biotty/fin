@@ -1,22 +1,20 @@
 #include "fom.hpp"
+#include "gtest/gtest.h"
 
-#define CATCH_CONFIG_MAIN
-#include "catch.hpp"
-
-TEST_CASE("call value", "[call]")
+TEST(fom, call)
 {
     Contract c { .contract_type = ContractType::CALL,
         .quantity = 100, .expiration = 40, .strike = 15 };
     PriceDelta pd = c.at(MarketPoint{ 0, 15, .7 });
-    REQUIRE(round_cents(pd.price) == 13725);
-    REQUIRE(round_cents(pd.delta) == 5457);
+    ASSERT_EQ(13725, round_cents(pd.price));
+    ASSERT_EQ(5457, round_cents(pd.delta));
 }
 
-TEST_CASE("put value", "[put]")
+TEST(fom, put)
 {
     Contract c { .contract_type = ContractType::PUT,
         .quantity = 100, .expiration = 40, .strike = 15 };
     PriceDelta pd = c.at(MarketPoint{ 0, 15, .7 });
-    REQUIRE(round_cents(pd.price) == 13725);
-    REQUIRE(round_cents(pd.delta) == -4543);
+    ASSERT_EQ(13725, round_cents(pd.price));
+    ASSERT_EQ(-4543, round_cents(pd.delta));
 }
